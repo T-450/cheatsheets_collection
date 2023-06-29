@@ -1,175 +1,123 @@
-git init            # initiates git in the current directory
-git remote add origin https://github.com/repo_name.git        # add remote reposiory
-git clone <address> # creates a git repo from given address (get the address from your git-server)
-git clone <address> -b <branch_name> <path/to/directory>  # clones a git repo from the address into the given directory and checkout's the given branch
-git clone <address> -b <branch_name> --single-branch  # Clones a single branch
+# Git-Cheat-Sheet
+A cheat sheet for uncommon Git commands
 
-git add <file_name>   # adds(stages) file.txt to the git
-git add *          # adds(stages) all new modifications, deletions, creations to the git
-git reset file.txt # Removes file.txt from the stage
-git reset --hard   # Throws away all your uncommitted changes, hard reset files to HEAD
-git reset --soft <commit_id> # moves the head pointer
-git reset --mixed <commit_id> # moves the head pointer and then copies the files from the commit it is now pointing to the staging area,
-# the default when no argument is provided
-git reset -hard <commit_id> # moves the head pointer and then copies the files from the commit it is now pointing to the staging area 
-# and working directory thus, throw away all uncommitted changes
+## Configuration
+| Command | Description |
+| - | - |
+| `git config --global user.name "foo"`              | Set user name |
+| `git config --global user.email "foo@example.com"` | Set user email |
 
-# git reset
-# 1. Move HEAD and current branch
-# 2. Reset the staging area
-# 3. Reset the working area
+## Branches
+| Command | Description |
+| - | - |
+| `git branch foo`                          | Create a new branch |
+| `git branch -d foo`                       | Deletes a branch |
+| `git switch foo`                          | Switch to a branch |
+| `git switch -c\|--create foo`             | Create and switch to a branch |
+| `git restore foo.js`                      | Undo all changes on the foo.js file |
+| `git checkout foo.js`                     | Undo all changes on the foo.js file |
+| `git checkout foo`                        | Use `git switch` instead |
+| `git checkout -b foo`                     | Use `git switch -c` instead |
+| `git merge foo`                           | Merge branch into current branch |
 
-# --soft = (1)
-# --mixed = (1) & (2) (default)
-# --hard = (1) & (2) & (3)
+## Pulling
+| Command | Description |
+| - | - |
+| `git pull --rebase --prune`               | Get latest, rebase any changes not checked in and delete branches that no longer exist | 
 
-git rm file.txt    # removes file.txt both from git and file system
-git rm --cached file.txt # only removes file.txt both from git index
-git status         # shows the modifications and stuff that are not staged yet
+## Staged Changes
+| Command | Description |
+| - | - |
+| `git add file.txt`                        | Stage file |
+| `git add -p`|--patch file.txt`            | Stage some but not all changes in a file |
+| `git mv file1.txt file2.txt`              | Move/rename file |
+| `git rm --cached file.txt`                | Unstage file |
+| `git rm --force file.txt`                 | Unstage and delete file |
+| `git reset HEAD`                          | Unstage changes |
+| `git reset --hard HEAD`                   | Unstage and delete changes |
+| `git clean -f\|--force -d`                | Recursively remove untracked files from the working tree |
+| `git clean -f\|--force -d -x`             | Recursively remove untracked and ignored files from the working tree |
 
-git branch                         # shows all the branches (current branch is shown with a star)
-git branch -a                     # shows all the branches local and remote
+## Changing Commits
+| Command | Description |
+| - | - |
+| `git reset 5720fdf`                           | Reset current branch but not working area to commit |
+| `git reset HEAD~1`                            | Reset the current branch but not working area to the previous commit |
+| `git reset --hard 5720fdf`                    | Reset current branch and working area to commit |
+| `git commit --amend -m "New message"`         | Change the last commit message |
+| `git commit --fixup 5720fdf -m "New message"` | Merge into the specified commit |
+| `git revert 5720fdf`                          | Revert a commit |
+| `git rebase --interactive [origin/main]`      | Rebase a PR (`git pull` first) |
+| `git rebase --interactive 5720fdf`            | Rebase to a particular commit |
+| `git rebase --interactive --root 5720fdf`     | Rebase to the root commit |
+| `git rebase --continue`                       | Continue an interactive rebase |
+| `git rebase --abort`                          | Cancel an interactive rebase |
+| `git cherry-pick 5720fdf`                     | Copy the commit to the current branch |
 
-git branch my-branch               # creates my-branch
-git branch -d my-branch            # deletes my-branch
-git checkout my-branch         	   # switches to my-branch
-git merge my-branch                # merges my-branch to current branch
-git push origin --delete my-branch # delete remote branch
-git branch -m <new-branch-name>    # rename the branch
-git checkout --orphan <branch_name> # checkout a branch with no commit history
-git branch -vv                     # list all branches and their upstreams, as well as last commit on branch
-git branch -a                      # List all local and remote branches
+## Compare
+| Command | Description |
+| - | - |
+| `git diff`                                | See difference between working area and current branch |
+| `git diff HEAD HEAD~2`                    | See difference between te current commit and two previous commits |
+| `git diff main other`                     | See difference between two branches |
 
-git cherry-pick <commit_id>                     # merge the specified commit
-git cherry-pick <commit_id_A>^..<commit_id_B>   # pick the entire range of commits where A is older than B ( the ^ is for including A as well )
+## View
+| Command | Description |
+| - | - |
+| `git log`                                 | See commit list |
+| `git log --patch`                         | See commit list and line changes |
+| `git log --decorate --graph --oneline`    | See commit visualization |
+| `git log --grep foo`                      | See commits with foo in the message |
+| `git show HEAD`                           | Show the current commit |
+| `git show HEAD^` or `git show HEAD~1`     | Show the previous commit |
+| `git show HEAD^^` or `git show HEAD~2`    | Show the commit going back two commits |
+| `git show main`                           | Show the last commit in a branch |
+| `git show 5720fdf`                        | Show named commit |
+| `git blame file.txt`                      | See who changed each line and when |
 
-git remote                         # shows the remotes
-git remote -v                      # shows the remote for pull and push
-git remote add my-remote <address> # creates a remote (get the address from your git-server)
-git remote rm my-remote            # Remove a remote
+## Stash
+| Command | Description |
+| - | - |
+| `git stash push -m "Message"`             | Stash staged files |
+| `git stash --include-untracked`           | Stash working area and staged files |
+| `git stash --staged`                      | Stash staged files |
+| `git stash list`                          | List stashes |
+| `git stash apply`                         | Moved last stash to working area |
+| `git stash apply 0`                       | Moved named stash to working area |
+| `git stash clear`                         | Clear the stash |
 
-git log                      # shows the log of commits
-# git log by default uses less command so you can use these: f=next page, b=prev page, search=/<query>, n=next match, p=prev match, q=quit
-git log --no-pager    # shows the log of commits without less command
-git log --oneline            # shows the log of commits, each commit in a single line
+## Tags
+| Command | Description |
+| - | - |
+| `git tag`                                              | List all tags |
+| `git tag -a\|--annotate 0.0.1 -m\|--message "Message"` | Create a tag |
+| `git tag -d\|--delete 0.0.1`                           | Delete a tag |
+| `git push --tags`                                      | Push tags to remote repository |
 
-git log --oneline --graph --decorate    # shows the log of commits, each commit in a single line with graph 
-git log --since=<time>                    # shows the log of commits since given time
-git log -- <file_name>
-git log -p <file_name>       # change over time for a specific file
-git log <Branch1> ^<Branch2> # lists commit(s) in branch1 that are not in branch2
-git log -n <x>               # lists the last x commits
-git log -n <x> --oneline     # lists the last x commits, each commit in single line
-git grep --heading --line-number '<string/regex>' # Find lines matching the pattern in tracked files
-git log --grep='<string/regex>'                   # Search Commit log
+## Remote
+| Command | Description |
+| - | - |
+| `git remote -v`                           | List remote repositories |
+| `git remote show origin`                  | Show remote repository details |
+| `git remote add upstream <url>`           | Add remote upstream repository |
+| `git fetch upstream`                      | Fetch all remote branches |
+| `git rebase upstream/main`                | Refresh main branch from upstream |
+| `git remote -v`                           | List remote repositories |
+| `git push --force`                        | Push any changes while overwriting any remote changes |
+| `git push --force-with-lease`             | Push any changes but stop if there are any remote changes |
+| `git push --tags`                         | Push tags to remote repository |
 
-git reflog                       # record when the tips of branches and other references were updated in the local repository.
-git ls-files                     # show information about files in the index and the working tree
+## Submodules
+| Command | Description |
+| - | - |
+| `git submodule status`                    | Check status of all submodules |
 
-git commit -m "msg"          # commit changes with a msg
-git commit -m "title" -m "description" # commit changes with a title and description
-git commit --amend           # combine staged changes with the previous commit, or edit the previous commit message without changing its snapshot
-git commit --amend --no-edit # amends a commit without changing its commit message
-git commit --amend --author='Author Name <email@address.com>'    # Amend the author of a commit
-git push my-remote my-branch # pushes the commits to the my-remote in my-branch (does not push the tags)
-git revert <commit-id>       # Undo a commit by creating a new commit
-
-git show                    # shows one or more objects (blobs, trees, tags and commits).
-git diff                     # show changes between commits, commit and working tree
-git diff HEAD               #show changes between working directory vs last commit
-git diff --staged HEAD    #show changes between stage area vs last commit
-
-git diff --color             # show colored diff
-git diff --staged            # Shows changes staged for commit
-
-git tag                           # shows all the tags
-git tag -a v1.0 -m "msg"          # creates an annotated tag
-git show v1.0                     # shows the description of version-1.0 tag
-git tag --delete v1.0             # deletes the tag in local directory
-git push --delete my-remote v1.0  # deletes the tag in my-remote (be carefore to not delete a branch)
-git push my-remote my-branch v1.0 # push v1.0 tag to my-remote in my-branch
-git fetch --tags                  # pulls the tags from remote
-
-git pull my-remote my-branch   # pulls and tries to merge my-branch from my-remote to the current branch git pull = git fetch && get merge
-
-
-git stash                            # stashes the staged and unstaged changes (git status will be clean after it)
-git stash -u                         # stash everything including new untracked files (but not .gitignore)
-git stash save "msg"                 # stash with a msg
-git stash list                       # list all stashes
-git stash pop                        # delete the recent stash and applies it
-git stash pop stash@{2}              # delete the {2} stash and applies it
-git stash show                       # shows the description of stash
-git stash apply                      # keep the stash and applies it to the git
-git stash branch my-branch stash@{1} # creates a branch from your stash
-git stash drop stash@{1}             # deletes the {1} stash
-git stash clear                      # clears all the stash
-
-git rebase -i <commit_id>         # Rebase commits from a commit ID
-git rebase --abort                # Abort a running rebase
-git rebase --continue             # Continue rebasing after fixing all conflicts
-
-git clean -f                      # clean untracked files permanently
-git clean -f -d/git clean -fd     # To remove directories permanently
-git clean -f -X/git clean -fX    # To remove ignored files permanently
-git clean -f -x/git clean -fx     # To remove ignored and non-ignored files permanently
-git clean -d --dry-run            # shows what would be deleted
-
-
-git config --global --list                   # lists the git configuration for all repos
-git config --global --edit                   # opens an editor to edit the git config file
-git config --global alias.<handle> <command> # add git aliases to speed up workflow , eg.
-# if  handle is st and command is status then running git st would execute git status 
-git config --global core.editor <editor_name>      # config default editor
-
-
-git archive <branch_name> --format=zip --outpute=./<archive_name>.zip # create an archive of files from a named tree
-
-
-.gitignore
-# is a file including names of stuff that you don"t want to be staged or tracked.
-# You usually keep your local files like database, media, etc here.
-# You can find good resources online about ignoring specific files in your project files.
-# .gitignore is also get ignored 
-.git
-# is a hidden directory in repo directory including git files. It is created after "git init".
-
-
-# Some useful notes:
-
-# Better Commit messages:
-#   Key to Effective Debugging
-#   For the commit message to help in debugging effectively, ensure that it is short and use an imperative 
-#   mood (spoken or written as if giving a command or instruction) when constructing them.
-#   Also use feature tense for commit messages.
-#   The first word in your commit message should be one of these:
-#   Add
-#   Create
-#   Refactor
-#   Fix
-#   Release
-#   Document
-#   Modify
-#   Update
-#   Remove
-#   Delete etc...
-
-# About resetting:
-#   Use git revert instead of git reset in shared repositories
-#   git revert creates a new commit that introduces the opposite changes from the specified commit.
-#   Revert does not change history the original commit stays in the repository
-
-
-# Difference between ~ and ^ in git:
-#   > ^ or ^n
-#       >no args: == ^1: the first parent commit
-#       >n: the nth parent commit
-
-#   > ~ or ~n
-#       >no args: == ~1: the first commit back, following 1st parent
-#       >n: number of commits back, following only 1st parent
-#   note: ^ and ~ can be combined
-
-# Some tools to improve git skill by visualizing it:
-#   https://git-school.github.io/visualizing-git/
-#   https://learngitbranching.js.org/
+- Pull submodules
+  1. `git submodule sync`
+  2. `git submodule init`
+  3. `git submodule update`
+- Change branch
+  1. `cd /submodule`
+  2. `git fetch origin <branch-name>`
+  3. `git checkout <branch-name>`
+  4. `cd /`
