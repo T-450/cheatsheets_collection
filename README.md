@@ -1,6 +1,6 @@
 # Cheatsheets Collection
 
-Here you will find a collection of cheatsheets designed to assist programmers in their daily coding endeavors, inspired by the legendary programming mastermind, Falconhoof.
+Here you will find a collection of cheatsheets designed to assist programmers in their daily coding endeavors, inspired by the legendary programming masterminds.
 
 ## Introduction
 
